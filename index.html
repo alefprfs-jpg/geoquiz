@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoQuiz Bandeiras</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #f0f8ff;
+    margin: 20px;
+}
+
+h1{
+    color: #0066cc;
+}
+
+.quiz{
+    background: white;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+button{
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌎 GeoQuiz - Bandeiras</h1>
+
+<div class="quiz">
+    <h2>🇧🇷</h2>
+    <p>Qual é este país?</p>
+
+    <button onclick="verificar('A')">Argentina</button>
+    <button onclick="verificar('B')">Portugal</button>
+    <button onclick="verificar('C')">Brasil</button>
+    <button onclick="verificar('D')">México</button>
+
+    <p id="resultado"></p>
+</div>
+
+<script>
+function verificar(resposta){
+    if(resposta === 'C'){
+        document.getElementById("resultado").innerHTML =
+        "✅ Correto! É o Brasil.";
+    }else{
+        document.getElementById("resultado").innerHTML =
+        "❌ Resposta incorreta.";
+    }
+}
+</script>
+
+</body>
+</html>

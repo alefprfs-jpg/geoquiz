@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GeoQuiz Bandeiras</title>
+<title>GeoQuiz - Quiz Geográfico Completo</title>
 
 <style>
 * {
@@ -13,7 +13,7 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     display: flex;
@@ -24,10 +24,10 @@ body {
 
 .container {
     background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     padding: 40px;
-    max-width: 700px;
+    max-width: 800px;
     width: 100%;
 }
 
@@ -38,36 +38,164 @@ body {
 
 h1 {
     color: #667eea;
-    font-size: 2.5em;
+    font-size: 2.8em;
     margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.score {
-    font-size: 1.2em;
+.subtitle {
     color: #666;
-    margin-top: 10px;
+    font-size: 1.1em;
+    margin-bottom: 20px;
 }
 
-.quiz-content {
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.stat-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.stat-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.progress {
+    width: 100%;
+    height: 10px;
+    background: #eee;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.5s ease;
+}
+
+.mode-selector {
+    display: none;
     text-align: center;
 }
 
+.mode-selector.show {
+    display: block;
+}
+
+.mode-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    padding: 20px;
+    font-size: 1em;
+    background: #f0f0f0;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    color: #333;
+}
+
+.mode-btn:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.mode-btn .icon {
+    font-size: 2em;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.quiz-content {
+    display: none;
+}
+
+.quiz-content.show {
+    display: block;
+}
+
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+}
+
+.quiz-info {
+    font-size: 0.95em;
+    color: #666;
+}
+
+.difficulty-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+.difficulty-easy {
+    background: #27ae60;
+    color: white;
+}
+
+.difficulty-medium {
+    background: #f39c12;
+    color: white;
+}
+
+.difficulty-hard {
+    background: #e74c3c;
+    color: white;
+}
+
 .flag {
-    font-size: 8em;
+    font-size: 7em;
     margin: 30px 0;
     animation: bounce 0.6s ease-in-out;
 }
 
 @keyframes bounce {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.05); }
 }
 
 .question {
-    font-size: 1.5em;
+    font-size: 1.4em;
     color: #333;
     margin-bottom: 30px;
     font-weight: bold;
+    text-align: center;
 }
 
 .options {
@@ -79,43 +207,61 @@ h1 {
 
 .option-btn {
     padding: 15px 20px;
-    font-size: 1em;
+    font-size: 0.95em;
     background: #f0f0f0;
     border: 2px solid #ddd;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-weight: bold;
+    font-weight: 600;
     color: #333;
 }
 
-.option-btn:hover {
+.option-btn:hover:not(:disabled) {
     background: #667eea;
     color: white;
     border-color: #667eea;
     transform: translateY(-2px);
 }
 
-.option-btn:active {
-    transform: translateY(0);
+.option-btn:disabled {
+    cursor: not-allowed;
 }
 
 #resultado {
-    font-size: 1.3em;
+    font-size: 1.2em;
     margin-top: 20px;
     min-height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .correto {
     color: #27ae60;
+    background: #d5f4e6;
+    padding: 15px;
+    border-radius: 8px;
 }
 
 .incorreto {
     color: #e74c3c;
+    background: #fadbd8;
+    padding: 15px;
+    border-radius: 8px;
 }
 
 .next-btn {
@@ -142,58 +288,167 @@ h1 {
     transform: translateY(-2px);
 }
 
-.progress {
-    width: 100%;
-    height: 8px;
-    background: #eee;
-    border-radius: 10px;
-    margin-bottom: 30px;
-    overflow: hidden;
-}
-
-.progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-    transition: width 0.3s ease;
-}
-
 .final-screen {
     display: none;
     text-align: center;
+    animation: fadeIn 0.5s ease;
 }
 
 .final-screen.show {
     display: block;
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.final-emoji {
+    font-size: 4em;
+    margin-bottom: 20px;
+}
+
 .final-score {
-    font-size: 3em;
+    font-size: 3.5em;
     color: #667eea;
     margin: 20px 0;
     font-weight: bold;
 }
 
-.restart-btn {
-    width: 100%;
+.final-message {
+    font-size: 1.3em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.final-percentage {
+    font-size: 1.5em;
+    color: #764ba2;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.performance-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.performance-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.performance-row:last-child {
+    border-bottom: none;
+}
+
+.buttons-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-restart, .btn-home {
+    flex: 1;
+    min-width: 150px;
     padding: 15px;
-    background: #27ae60;
-    color: white;
     border: none;
     border-radius: 10px;
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.restart-btn:hover {
+.btn-restart {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-restart:hover {
     background: #229954;
+    transform: translateY(-2px);
+}
+
+.btn-home {
+    background: #3498db;
+    color: white;
+}
+
+.btn-home:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.difficulty-selector {
+    display: none;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.difficulty-selector.show {
+    display: block;
+}
+
+.difficulty-btns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.diff-btn {
+    padding: 12px;
+    font-size: 0.95em;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.diff-btn.easy {
+    color: #27ae60;
+    border-color: #27ae60;
+}
+
+.diff-btn.easy.active {
+    background: #27ae60;
+    color: white;
+}
+
+.diff-btn.medium {
+    color: #f39c12;
+    border-color: #f39c12;
+}
+
+.diff-btn.medium.active {
+    background: #f39c12;
+    color: white;
+}
+
+.diff-btn.hard {
+    color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+.diff-btn.hard.active {
+    background: #e74c3c;
+    color: white;
+}
+
+.diff-btn:hover {
     transform: translateY(-2px);
 }
 
 @media (max-width: 600px) {
     .container {
-        padding: 25px;
+        padding: 20px;
     }
 
     h1 {
@@ -209,7 +464,28 @@ h1 {
     }
 
     .question {
-        font-size: 1.2em;
+        font-size: 1.1em;
+    }
+
+    .stat-box {
+        min-width: 100px;
+        padding: 12px 20px;
+    }
+
+    .stat-value {
+        font-size: 1.5em;
+    }
+
+    .mode-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .buttons-group {
+        flex-direction: column;
+    }
+
+    .btn-restart, .btn-home {
+        width: 100%;
     }
 }
 </style>
@@ -219,18 +495,76 @@ h1 {
 
 <div class="container">
     <div class="header">
-        <h1>🌎 GeoQuiz - Bandeiras 🏳️</h1>
-        <div class="score">
-            Pontuação: <span id="score">0</span>/<span id="total">10</span>
+        <h1>🌎 GeoQuiz 🏳️</h1>
+        <p class="subtitle">Teste seus conhecimentos geográficos!</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-label">Jogos Completados</div>
+            <div class="stat-value" id="gamesPlayed">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Melhor Pontuação</div>
+            <div class="stat-value" id="bestScore">0%</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Média de Acertos</div>
+            <div class="stat-value" id="avgScore">0%</div>
         </div>
     </div>
 
-    <div class="progress">
+    <!-- Seletor de Modo -->
+    <div class="mode-selector" id="modeSelector">
+        <h2 style="margin-bottom: 25px; color: #333;">Escolha um Modo de Jogo</h2>
+        <div class="mode-buttons">
+            <button class="mode-btn" onclick="iniciarModo('bandeiras')">
+                <span class="icon">🏳️</span>
+                Bandeiras
+            </button>
+            <button class="mode-btn" onclick="iniciarModo('capitais')">
+                <span class="icon">🏛️</span>
+                Capitais
+            </button>
+            <button class="mode-btn" onclick="iniciarModo('continentes')">
+                <span class="icon">🗺️</span>
+                Continentes
+            </button>
+            <button class="mode-btn" onclick="iniciarModo('rios')">
+                <span class="icon">🏞️</span>
+                Rios
+            </button>
+            <button class="mode-btn" onclick="iniciarModo('montanhas')">
+                <span class="icon">⛰️</span>
+                Montanhas
+            </button>
+        </div>
+    </div>
+
+    <!-- Seletor de Dificuldade -->
+    <div class="difficulty-selector" id="difficultySelector">
+        <h3 style="margin-bottom: 15px; color: #333;">Selecione o Nível de Dificuldade</h3>
+        <div class="difficulty-btns">
+            <button class="diff-btn easy" onclick="selecionarDificuldade('facil')">Fácil</button>
+            <button class="diff-btn medium" onclick="selecionarDificuldade('medio')">Médio</button>
+            <button class="diff-btn hard" onclick="selecionarDificuldade('dificil')">Difícil</button>
+        </div>
+    </div>
+
+    <div class="progress" id="progressContainer">
         <div class="progress-bar" id="progressBar"></div>
     </div>
 
+    <!-- Quiz Content -->
     <div class="quiz-content" id="quizContent">
-        <div class="flag" id="flag">🇧🇷</div>
+        <div class="quiz-header">
+            <div class="quiz-info">
+                Pergunta <span id="currentQuestion">1</span> de <span id="totalQuestions">15</span>
+            </div>
+            <span class="difficulty-badge" id="difficultyBadge">Fácil</span>
+        </div>
+
+        <div class="flag" id="flag">🏳️</div>
         <div class="question" id="question">Qual é este país?</div>
         
         <div class="options">
@@ -244,87 +578,389 @@ h1 {
         <button class="next-btn" id="nextBtn" onclick="proximaPergunta()">Próxima Pergunta →</button>
     </div>
 
+    <!-- Final Screen -->
     <div class="final-screen" id="finalScreen">
-        <h2>🎉 Quiz Finalizado! 🎉</h2>
-        <div class="final-score" id="finalScore">0/10</div>
-        <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">Parabéns por participar!</p>
-        <button class="restart-btn" onclick="reiniciar()">Começar Novamente 🔄</button>
+        <div class="final-emoji" id="finalEmoji">🎉</div>
+        <h2 style="color: #333; margin-bottom: 15px;">Quiz Finalizado!</h2>
+        <div class="final-score" id="finalScore">0/15</div>
+        <div class="final-percentage" id="finalPercentage">0%</div>
+        <div class="final-message" id="finalMessage">Parabéns!</div>
+        
+        <div class="performance-details">
+            <div class="performance-row">
+                <span>Acertos:</span>
+                <strong id="acertos">0</strong>
+            </div>
+            <div class="performance-row">
+                <span>Erros:</span>
+                <strong id="erros">0</strong>
+            </div>
+            <div class="performance-row">
+                <span>Taxa de Acerto:</span>
+                <strong id="taxaAcerto">0%</strong>
+            </div>
+            <div class="performance-row">
+                <span>Modo:</span>
+                <strong id="modoFinal">-</strong>
+            </div>
+            <div class="performance-row">
+                <span>Dificuldade:</span>
+                <strong id="dificuldadeFinal">-</strong>
+            </div>
+        </div>
+        
+        <div class="buttons-group">
+            <button class="btn-restart" onclick="reiniciar()">🔄 Jogar Novamente</button>
+            <button class="btn-home" onclick="irParaMenu()">🏠 Voltar ao Menu</button>
+        </div>
     </div>
 </div>
 
 <script>
-const quizzes = [
-    {
-        flag: '🇧🇷',
-        question: 'Qual é este país?',
-        options: ['Argentina', 'Portugal', 'Brasil', 'México'],
-        correct: 2
+// Base de dados de perguntas
+const quizzesData = {
+    bandeiras: {
+        facil: [
+            { flag: '🇧🇷', question: 'Qual é este país?', options: ['Argentina', 'Portugal', 'Brasil', 'México'], correct: 2 },
+            { flag: '🇺🇸', question: 'Qual país tem esta bandeira?', options: ['Canadá', 'México', 'Estados Unidos', 'Cuba'], correct: 2 },
+            { flag: '🇫🇷', question: 'Qual país?', options: ['Itália', 'França', 'Espanha', 'Alemanha'], correct: 1 },
+            { flag: '🇬🇧', question: 'Qual é este país?', options: ['Irlanda', 'Reino Unido', 'Escócia', 'País de Gales'], correct: 1 },
+            { flag: '🇯🇵', question: 'Qual país tem esta bandeira?', options: ['China', 'Coreia do Sul', 'Japão', 'Vietnã'], correct: 2 },
+            { flag: '🇦🇺', question: 'Qual é este país?', options: ['Nova Zelândia', 'Austrália', 'Fiji', 'Samoa'], correct: 1 },
+            { flag: '🇨🇦', question: 'Qual país?', options: ['EUA', 'México', 'Canadá', 'Groenlândia'], correct: 2 },
+            { flag: '🇪🇸', question: 'Qual é este país?', options: ['Portugal', 'Itália', 'Espanha', 'Grécia'], correct: 2 },
+            { flag: '🇮🇹', question: 'Qual país?', options: ['Malta', 'Grécia', 'Itália', 'Albânia'], correct: 2 },
+            { flag: '🇩🇪', question: 'Qual é este país?', options: ['Áustria', 'Polônia', 'Alemanha', 'Holanda'], correct: 2 },
+            { flag: '🇸🇪', question: 'Qual país?', options: ['Noruega', 'Suécia', 'Dinamarca', 'Finlândia'], correct: 1 },
+            { flag: '🇨🇭', question: 'Qual é este país?', options: ['Áustria', 'Holanda', 'Suíça', 'Luxemburgo'], correct: 2 },
+            { flag: '🇳🇿', question: 'Qual país?', options: ['Austrália', 'Nova Zelândia', 'Fiji', 'Samoa'], correct: 1 },
+            { flag: '🇿🇦', question: 'Qual é este país?', options: ['Botswana', 'Zimbábue', 'África do Sul', 'Lesoto'], correct: 2 },
+            { flag: '🇰🇷', question: 'Qual país?', options: ['Vietnã', 'Tailândia', 'Coreia do Sul', 'Camboja'], correct: 2 }
+        ],
+        medio: [
+            { flag: '🇳🇱', question: 'Qual país tem esta bandeira?', options: ['Bélgica', 'Luxemburgo', 'Holanda', 'Dinamarca'], correct: 2 },
+            { flag: '🇵🇱', question: 'Qual é este país?', options: ['República Tcheca', 'Polônia', 'Eslováquia', 'Hungria'], correct: 1 },
+            { flag: '🇬🇷', question: 'Qual país?', options: ['Chipre', 'Albânia', 'Grécia', 'Montenegro'], correct: 2 },
+            { flag: '🇵🇹', question: 'Qual é este país?', options: ['Espanha', 'Portugal', 'Irlanda', 'Malta'], correct: 1 },
+            { flag: '🇧🇪', question: 'Qual país?', options: ['Holanda', 'Luxemburgo', 'Bélgica', 'Dinamarca'], correct: 2 },
+            { flag: '🇷🇴', question: 'Qual é este país?', options: ['Hungria', 'Eslováquia', 'Romênia', 'Sérvia'], correct: 2 },
+            { flag: '🇳🇴', question: 'Qual país?', options: ['Suécia', 'Noruega', 'Finlândia', 'Islândia'], correct: 1 },
+            { flag: '🇮🇳', question: 'Qual é este país?', options: ['Paquistão', 'Bangladesh', 'Índia', 'Vietnã'], correct: 2 },
+            { flag: '🇹🇭', question: 'Qual país?', options: ['Vietnã', 'Camboja', 'Tailândia', 'Laos'], correct: 2 },
+            { flag: '🇦🇪', question: 'Qual é este país?', options: ['Jordânia', 'Arábia Saudita', 'Emirados Árabes', 'Iêmen'], correct: 2 },
+            { flag: '🇲🇽', question: 'Qual país?', options: ['Guatemala', 'Honduras', 'México', 'Belize'], correct: 2 },
+            { flag: '🇵🇪', question: 'Qual é este país?', options: ['Bolívia', 'Colômbia', 'Peru', 'Equador'], correct: 2 },
+            { flag: '🇨🇱', question: 'Qual país?', options: ['Argentina', 'Paraguai', 'Chile', 'Uruguai'], correct: 2 },
+            { flag: '🇪🇨', question: 'Qual é este país?', options: ['Colômbia', 'Venezuela', 'Equador', 'Guiana'], correct: 2 },
+            { flag: '🇸🇰', question: 'Qual país?', options: ['Polônia', 'República Tcheca', 'Eslováquia', 'Hungria'], correct: 2 }
+        ],
+        dificil: [
+            { flag: '🇱🇻', question: 'Qual país tem esta bandeira?', options: ['Lituânia', 'Letônia', 'Estônia', 'Bielorrússia'], correct: 1 },
+            { flag: '🇲🇩', question: 'Qual é este país?', options: ['Romênia', 'Moldávia', 'Ucrânia', 'Sérvia'], correct: 1 },
+            { flag: '🇧🇹', question: 'Qual país?', options: ['Nepal', 'Butão', 'Bangladesh', 'Sri Lanka'], correct: 1 },
+            { flag: '🇭🇰', question: 'Qual é este país?', options: ['Mongólia', 'Macau', 'Hong Kong', 'Taiwan'], correct: 2 },
+            { flag: '🇲🇦', question: 'Qual país?', options: ['Marrocos', 'Tunísia', 'Argélia', 'Egito'], correct: 0 },
+            { flag: '🇵🇭', question: 'Qual é este país?', options: ['Indonésia', 'Malásia', 'Filipinas', 'Singapura'], correct: 2 },
+            { flag: '🇲🇺', question: 'Qual país?', options: ['Mauritânia', 'Mali', 'Mauritius', 'Madagascar'], correct: 2 },
+            { flag: '🇪🇹', question: 'Qual é este país?', options: ['Sudão', 'Etiópia', 'Somália', 'Quênia'], correct: 1 },
+            { flag: '🇦🇲', question: 'Qual país?', options: ['Geórgia', 'Armênia', 'Azerbaijão', 'Irã'], correct: 1 },
+            { flag: '🇧🇿', question: 'Qual é este país?', options: ['Guatemala', 'Honduras', 'Belize', 'El Salvador'], correct: 2 },
+            { flag: '🇬🇦', question: 'Qual país?', options: ['Benin', 'Gabão', 'Nigéria', 'Camarões'], correct: 1 },
+            { flag: '🇱🇹', question: 'Qual é este país?', options: ['Letônia', 'Estônia', 'Lituânia', 'Bielorrússia'], correct: 2 },
+            { flag: '🇦🇿', question: 'Qual país?', options: ['Irã', 'Turquia', 'Azerbaijão', 'Turcomenistão'], correct: 2 },
+            { flag: '🇩🇯', question: 'Qual é este país?', options: ['Somália', 'Eritreia', 'Djibuti', 'Etiópia'], correct: 2 },
+            { flag: '🇵🇸', question: 'Qual país?', options: ['Palestina', 'Líbano', 'Síria', 'Iraque'], correct: 0 }
+        ]
     },
-    {
-        flag: '🇫🇷',
-        question: 'Qual país tem esta bandeira?',
-        options: ['Itália', 'França', 'Espanha', 'Alemanha'],
-        correct: 1
+    capitais: {
+        facil: [
+            { flag: '🏛️', question: 'Qual é a capital do Brasil?', options: ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Salvador'], correct: 2 },
+            { flag: '🗽', question: 'Qual é a capital dos EUA?', options: ['New York', 'Los Angeles', 'Washington D.C.', 'Chicago'], correct: 2 },
+            { flag: '🗼', question: 'Qual é a capital da França?', options: ['Lyon', 'Paris', 'Marseille', 'Nice'], correct: 1 },
+            { flag: '🏰', question: 'Qual é a capital do Reino Unido?', options: ['Manchester', 'Liverpool', 'Londres', 'Birmingham'], correct: 2 },
+            { flag: '🗻', question: 'Qual é a capital do Japão?', options: ['Osaka', 'Quioto', 'Tóquio', 'Hiroshima'], correct: 2 },
+            { flag: '🏯', question: 'Qual é a capital da Austrália?', options: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'], correct: 2 },
+            { flag: '⛪', question: 'Qual é a capital da Itália?', options: ['Milão', 'Veneza', 'Roma', 'Florença'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Espanha?', options: ['Barcelona', 'Valencia', 'Madri', 'Sevilha'], correct: 2 },
+            { flag: '🌉', question: 'Qual é a capital do Canadá?', options: ['Toronto', 'Vancouver', 'Ottawa', 'Montreal'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital de Portugal?', options: ['Porto', 'Braga', 'Lisboa', 'Covilhã'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Alemanha?', options: ['Munique', 'Frankfurt', 'Berlim', 'Colônia'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital da Grécia?', options: ['Salónica', 'Patras', 'Atenas', 'Rodes'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital do México?', options: ['Guadalajara', 'Cancún', 'Cidade do México', 'Veracruz'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital da Argentina?', options: ['Córdoba', 'Rosário', 'Buenos Aires', 'Mendoza'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital do Chile?', options: ['Valparaíso', 'Concepción', 'Santiago', 'Antofagasta'], correct: 2 }
+        ],
+        medio: [
+            { flag: '🏛️', question: 'Qual é a capital da Bélgica?', options: ['Antuérpia', 'Bruges', 'Bruxelas', 'Gand'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital da Holanda?', options: ['Rotterdam', 'Amsterdam', 'Roterdã', 'Haia'], correct: 1 },
+            { flag: '🏛️', question: 'Qual é a capital da Suíça?', options: ['Zurique', 'Genebra', 'Berna', 'Basileia'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital da Romênia?', options: ['Craiova', 'Constanța', 'Bucareste', 'Cluj'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Polônia?', options: ['Kraków', 'Gdańsk', 'Varsóvia', 'Poznan'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital da República Tcheca?', options: ['Brno', 'Pilsen', 'Praga', 'Ostrava'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Hungria?', options: ['Debrecen', 'Szeged', 'Budapeste', 'Pécs'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital da Noruega?', options: ['Bergen', 'Stavanger', 'Oslo', 'Trondheim'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Suécia?', options: ['Gotemburgo', 'Malmö', 'Estocolmo', 'Uppsala'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital da Tailândia?', options: ['Chiang Mai', 'Phuket', 'Banguecoque', 'Pattaya'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Índia?', options: ['Mumbai', 'Bangalore', 'Nova Délhi', 'Kolkata'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital de Singapura?', options: ['Changi', 'Marina', 'Singapura', 'Sentosa'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Irlanda?', options: ['Cork', 'Galway', 'Dublin', 'Limerick'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital da Nova Zelândia?', options: ['Auckland', 'Christchurch', 'Wellington', 'Dunedin'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da África do Sul?', options: ['Joanesburgo', 'Durban', 'Pretória', 'Cape Town'], correct: 2 }
+        ],
+        dificil: [
+            { flag: '🏛️', question: 'Qual é a capital da Moldávia?', options: ['Tiraspol', 'Chișinău', 'Bálți', 'Soroca'], correct: 1 },
+            { flag: '🏰', question: 'Qual é a capital de Luxemburgo?', options: ['Diekirch', 'Wiltz', 'Luxemburgo', 'Esch-sur-Alzette'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital do Butão?', options: ['Paro', 'Punakha', 'Thimphu', 'Jakar'], correct: 2 },
+            { flag: '🏰', question: 'Qual é a capital de Montenegro?', options: ['Nikšić', 'Budva', 'Podgorica', 'Cetinje'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Lituânia?', options: ['Kaunas', 'Vilnius', 'Klaipėda', 'Panevėžys'], correct: 1 },
+            { flag: '🏰', question: 'Qual é a capital de Letônia?', options: ['Liepāja', 'Rīga', 'Daugavpils', 'Jelgava'], correct: 1 },
+            { flag: '🏛️', question: 'Qual é a capital da Estônia?', options: ['Tartu', 'Tallinn', 'Narva', 'Pärnu'], correct: 1 },
+            { flag: '🏰', question: 'Qual é a capital da Armênia?', options: ['Gyumri', 'Erevan', 'Vanadzor', 'Abovyan'], correct: 1 },
+            { flag: '🏛️', question: 'Qual é a capital do Azerbaijão?', options: ['Ganja', 'Baku', 'Sumgait', 'Mingachevir'], correct: 1 },
+            { flag: '🏰', question: 'Qual é a capital de Cyprus?', options: ['Larnaca', 'Limassol', 'Nicósia', 'Pafos'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Macedônia?', options: ['Tetovo', 'Skopje', 'Bitola', 'Kumanovo'], correct: 1 },
+            { flag: '🏰', question: 'Qual é a capital de Malta?', options: ['Sliema', 'Mosta', 'Valleta', 'Naxxar'], correct: 2 },
+            { flag: '🏛️', question: 'Qual é a capital da Albânia?', options: ['Durrës', 'Tirana', 'Vlorë', 'Gjirokastër'], correct: 1 },
+            { flag: '🏰', question: 'Qual é a capital da Sérvia?', options: ['Niš', 'Belgrado', 'Novi Sad', 'Subotica'], correct: 1 },
+            { flag: '🏛️', question: 'Qual é a capital de Mauritius?', options: ['Beau Bassin', 'Port Louis', 'Vacoas', 'Quatre Bornes'], correct: 1 }
+        ]
     },
-    {
-        flag: '🇯🇵',
-        question: 'Qual é este país asiático?',
-        options: ['China', 'Coreia do Sul', 'Japão', 'Vietnã'],
-        correct: 2
+    continentes: {
+        facil: [
+            { flag: '🌎', question: 'Qual continente tem o Brasil?', options: ['Ásia', 'América do Sul', 'América do Norte', 'África'], correct: 1 },
+            { flag: '🌍', question: 'A Europa é um continente?', options: ['Não', 'Sim', 'É uma península', 'Não existe'], correct: 1 },
+            { flag: '🌏', question: 'A Ásia é o maior continente?', options: ['Não', 'Sim', 'É o segundo', 'É o terceiro'], correct: 1 },
+            { flag: '🌎', question: 'Quantos continentes existem?', options: ['5', '6', '7', '8'], correct: 2 },
+            { flag: '🌍', question: 'A Austrália é um continente?', options: ['Não', 'Sim', 'É uma ilha', 'É uma região'], correct: 1 },
+            { flag: '🌏', question: 'A África é um continente?', options: ['Não', 'Sim', 'É uma região', 'Não existe'], correct: 1 },
+            { flag: '🌎', question: 'Qual continente tem o Egito?', options: ['Ásia', 'Europa', 'África', 'Américas'], correct: 2 },
+            { flag: '🌍', question: 'Qual continente tem a Rusia?', options: ['Ásia', 'Europa', 'Ambas', 'Nenhum'], correct: 2 },
+            { flag: '🌏', question: 'O Canadá fica em qual continente?', options: ['Ásia', 'Europa', 'América do Norte', 'América do Sul'], correct: 2 },
+            { flag: '🌎', question: 'Qual continente é o menor?', options: ['Europa', 'Ásia', 'Austrália', 'África'], correct: 2 },
+            { flag: '🌍', question: 'Qual continente tem a Austrália?', options: ['Ásia', 'Oceania', 'América', 'Europa'], correct: 1 },
+            { flag: '🌏', question: 'A Grenlândia fica em qual continente?', options: ['Europa', 'América do Norte', 'Ásia', 'Oceania'], correct: 1 },
+            { flag: '🌎', question: 'A Antártida é um continente?', options: ['Não', 'Sim', 'É uma região', 'É uma ilha'], correct: 1 },
+            { flag: '🌍', question: 'Em qual continente fica o Vietnã?', options: ['Europa', 'Ásia', 'Oceania', 'África'], correct: 1 },
+            { flag: '🌏', question: 'A América do Norte e do Sul formam um continente?', options: ['Sim', 'Não', 'Às vezes', 'Nunca'], correct: 1 }
+        ],
+        medio: [
+            { flag: '🌎', question: 'A Turquia fica em qual continente?', options: ['Europa e Ásia', 'Apenas Europa', 'Apenas Ásia', 'Ambas'], correct: 0 },
+            { flag: '🌍', question: 'A Nova Zelândia faz parte de qual continente?', options: ['Ásia', 'Oceania', 'América', 'Austrália'], correct: 1 },
+            { flag: '🌏', question: 'Em qual continente fica Madagascar?', options: ['Ásia', 'Europa', 'África', 'Oceania'], correct: 2 },
+            { flag: '🌎', question: 'Qual continente tem o Marrocos?', options: ['Ásia', 'Europa', 'África', 'Oceania'], correct: 2 },
+            { flag: '🌍', question: 'Em qual continente fica o Fiji?', options: ['Ásia', 'Europa', 'Oceania', 'América'], correct: 2 },
+            { flag: '🌏', question: 'A Geórgia fica em qual continente?', options: ['Europa e Ásia', 'Apenas Europa', 'Apenas Ásia', 'Nenhum'], correct: 0 },
+            { flag: '🌎', question: 'Qual continente tem a Irlanda?', options: ['América', 'Europa', 'Ásia', 'Oceania'], correct: 1 },
+            { flag: '🌍', question: 'Em qual continente fica Singapura?', options: ['Europa', 'Ásia', 'Oceania', 'América'], correct: 1 },
+            { flag: '🌏', question: 'O Egito fica em qual continente?', options: ['Ásia', 'Europa', 'África', 'Oceania'], correct: 2 },
+            { flag: '🌎', question: 'Qual continente tem o Líbano?', options: ['Europa', 'Ásia', 'América', 'Oceania'], correct: 1 },
+            { flag: '🌍', question: 'Em qual continente fica Israel?', options: ['Europa', 'Ásia', 'África', 'Oceania'], correct: 1 },
+            { flag: '🌏', question: 'A Arábia Saudita fica em qual continente?', options: ['Europa', 'Ásia', 'África', 'Oceania'], correct: 1 },
+            { flag: '🌎', question: 'Em qual continente fica a Somália?', options: ['Ásia', 'Europa', 'África', 'Oceania'], correct: 2 },
+            { flag: '🌍', question: 'O Irã fica em qual continente?', options: ['Europa', 'Ásia', 'África', 'Oceania'], correct: 1 },
+            { flag: '🌏', question: 'Qual continente tem o Iraque?', options: ['Europa', 'Ásia', 'África', 'Oceania'], correct: 1 }
+        ],
+        dificil: [
+            { flag: '🌎', question: 'Em qual continente fica o Djibuti?', options: ['Ásia', 'Europa', 'África', 'Oceania'], correct: 2 },
+            { flag: '🌍', question: 'A Armênia fica em qual continente?', options: ['Europa e Ásia', 'Apenas Ásia', 'Apenas Europa', 'Oceania'], correct: 0 },
+            { flag: '🌏', question: 'Em qual continente fica Timor Leste?', options: ['Europa', 'América', 'Ásia', 'Oceania'], correct: 2 },
+            { flag: '🌎', question: 'Qual continente tem o Mauritius?', options: ['Europa', 'América', 'Ásia', 'Oceania'], correct: 3 },
+            { flag: '🌍', question: 'Em qual continente fica Bahrain?', options: ['Europa', 'Ásia', 'África', 'Oceania'], correct: 1 },
+            { flag: '🌏', question: 'O Paquistão fica em qual continente?', options: ['Europa', 'Ásia', 'África', 'Oceania'], correct: 1 },
+            { flag: '🌎', question: 'Em qual continente fica a Eritreia?', options: ['Europa', 'América', 'África', 'Ásia'], correct: 2 },
+            { flag: '🌍', question: 'A Nigéria fica em qual continente?', options: ['Europa', 'Ásia', 'África', 'Oceania'], correct: 2 },
+            { flag: '🌏', question: 'Em qual continente fica o Vietnã?', options: ['Europa', 'Oceania', 'Ásia', 'América'], correct: 2 },
+            { flag: '🌎', question: 'O Camboja fica em qual continente?', options: ['Europa', 'América', 'Ásia', 'Oceania'], correct: 2 },
+            { flag: '🌍', question: 'Em qual continente fica a Malásia?', options: ['Europa', 'América', 'Ásia', 'Oceania'], correct: 2 },
+            { flag: '🌏', question: 'A Indonésia fica em qual continente?', options: ['Europa', 'América', 'Ásia', 'Oceania'], correct: 2 },
+            { flag: '🌎', question: 'Em qual continente fica o Bangladesh?', options: ['Europa', 'Oceania', 'Ásia', 'América'], correct: 2 },
+            { flag: '🌍', question: 'O Nepal fica em qual continente?', options: ['Europa', 'Oceania', 'Ásia', 'América'], correct: 2 },
+            { flag: '🌏', question: 'Em qual continente fica o Butão?', options: ['Europa', 'Oceania', 'Ásia', 'América'], correct: 2 }
+        ]
     },
-    {
-        flag: '🇺🇸',
-        question: 'Qual é este país?',
-        options: ['Canadá', 'México', 'Estados Unidos', 'Cuba'],
-        correct: 2
+    rios: {
+        facil: [
+            { flag: '💧', question: 'Qual é o rio mais longo do Brasil?', options: ['Rio da Prata', 'Rio Negro', 'Rio Amazonas', 'Rio Paraná'], correct: 2 },
+            { flag: '🌊', question: 'Qual é o rio mais longo do mundo?', options: ['Amazonas', 'Mississipi', 'Nilo', 'Danúbio'], correct: 2 },
+            { flag: '💧', question: 'Qual rio passa por Roma?', options: ['Pó', 'Tibre', 'Arno', 'Reno'], correct: 1 },
+            { flag: '🌊', question: 'Qual rio passa por Paris?', options: ['Reno', 'Loira', 'Sena', 'Mosela'], correct: 2 },
+            { flag: '💧', question: 'Qual rio passa por Londres?', options: ['Tamisa', 'Severn', 'Trent', 'Mersey'], correct: 0 },
+            { flag: '🌊', question: 'Qual é o rio mais longo da Europa?', options: ['Reno', 'Danúbio', 'Loira', 'Dnieper'], correct: 1 },
+            { flag: '💧', question: 'Qual rio passa por Viena?', options: ['Reno', 'Tamisa', 'Danúbio', 'Elba'], correct: 2 },
+            { flag: '🌊', question: 'Qual é o rio mais longo dos EUA?', options: ['Rio Colorado', 'Rio Mississipi', 'Rio Rh', 'Rio Hudson'], correct: 1 },
+            { flag: '💧', question: 'Qual rio passa pelo Egito?', options: ['Tigre', 'Eufrates', 'Nilo', 'Jordão'], correct: 2 },
+            { flag: '🌊', question: 'Qual rio passa por Berlim?', options: ['Elba', 'Spree', 'Oder', 'Reno'], correct: 0 },
+            { flag: '💧', question: 'Qual rio passa por Praga?', options: ['Reno', 'Elba', 'Vltava', 'Danúbio'], correct: 2 },
+            { flag: '🌊', question: 'Qual rio passa por Istambul?', options: ['Pó', 'Cuerno de Oro', 'Bósforo', 'Dardanelos'], correct: 2 },
+            { flag: '💧', question: 'Qual rio passa pela China?', options: ['Rio Amarelo', 'Rio Bravo', 'Rio Azul', 'Rio Vermelho'], correct: 0 },
+            { flag: '🌊', question: 'Qual rio passa pela Índia?', options: ['Rio Indo', 'Ganges', 'Rio Brahmaputra', 'Rio Bramaputra'], correct: 1 },
+            { flag: '💧', question: 'Qual rio passa pelo Japão?', options: ['Rio Shinano', 'Rio Ishikari', 'Rio Yodo', 'Rio Ibi'], correct: 0 }
+        ],
+        medio: [
+            { flag: '💧', question: 'Qual é o rio mais longo da Ásia?', options: ['Rio Amarelo', 'Rio Yangtze', 'Rio Mekong', 'Rio Indo'], correct: 1 },
+            { flag: '🌊', question: 'Qual rio separa Brasil e Peru?', options: ['Rio Madeira', 'Rio Acre', 'Rio Ucayali', 'Rio Putumayo'], correct: 0 },
+            { flag: '💧', question: 'Qual rio passa por Colônia na Alemanha?', options: ['Reno', 'Elba', 'Rur', 'Mosela'], correct: 0 },
+            { flag: '🌊', question: 'Qual rio passa por Rotterdam na Holanda?', options: ['Rhine', 'Meuse', 'Maas', 'Waal'], correct: 3 },
+            { flag: '💧', question: 'Qual rio passa por Belgrado?', options: ['Reno', 'Danúbio', 'Sava', 'Drina'], correct: 1 },
+            { flag: '🌊', question: 'Qual é o rio mais longo da Índia?', options: ['Brahmaputra', 'Ganges', 'Indo', 'Narmada'], correct: 1 },
+            { flag: '💧', question: 'Qual rio passa por Bucareste?', options: ['Dnieper', 'Danúbio', 'Prut', 'Siret'], correct: 1 },
+            { flag: '🌊', question: 'Qual rio passa pela Itália do norte?', options: ['Tibre', 'Arno', 'Pó', 'Adige'], correct: 2 },
+            { flag: '💧', question: 'Qual rio passa por Atenas?', options: ['Aliacmon', 'Haliacmon', 'Cefiso', 'Iliso'], correct: 3 },
+            { flag: '🌊', question: 'Qual rio passa por Moscou?', options: ['Oka', 'Volga', 'Moscowa', 'Don'], correct: 2 },
+            { flag: '💧', question: 'Qual rio passa por Estocolmo?', options: ['Göta älv', 'Torneälven', 'Norrström', 'Mälaren'], correct: 2 },
+            { flag: '🌊', question: 'Qual é o rio mais longo da Polônia?', options: ['Oder', 'Wisła', 'San', 'Narew'], correct: 1 },
+            { flag: '💧', question: 'Qual rio passa por Varsóvia?', options: ['Oder', 'Vístula', 'San', 'Narew'], correct: 1 },
+            { flag: '🌊', question: 'Qual rio passa por Lisboa?', options: ['Tejo', 'Douro', 'Mondego', 'Vouga'], correct: 0 },
+            { flag: '💧', question: 'Qual rio passa por Bagdá?', options: ['Tigre', 'Eufrates', 'Tigre e Eufrates', 'Jordão'], correct: 1 }
+        ],
+        dificil: [
+            { flag: '💧', question: 'Qual é o rio mais longo da Itália?', options: ['Arno', 'Adige', 'Pó', 'Tibre'], correct: 2 },
+            { flag: '🌊', question: 'Qual rio passa por Jirkov?', options: ['Elba', 'Ohre', 'Labe', 'Vltava'], correct: 1 },
+            { flag: '💧', question: 'Qual é o rio mais longo da Bélgica?', options: ['Reno', 'Meuse', 'Sambre', 'Ourthe'], correct: 1 },
+            { flag: '🌊', question: 'Qual rio passa por Lodz na Polônia?', options: ['Oder', 'Narew', 'Narew', 'Lodka'], correct: 1 },
+            { flag: '💧', question: 'Qual rio passa por Riga na Letônia?', options: ['Daugava', 'Gauja', 'Lielupe', 'Nemunas'], correct: 0 },
+            { flag: '🌊', question: 'Qual é o rio mais longo da Grécia?', options: ['Haliacmon', 'Peneios', 'Aliacmon', 'Halios'], correct: 2 },
+            { flag: '💧', question: 'Qual rio passa por Brno na República Tcheca?', options: ['Svratka', 'Moravica', 'Dyje', 'Jihlavá'], correct: 1 },
+            { flag: '🌊', question: 'Qual é o rio mais longo do Nepal?', options: ['Gandaki', 'Kosi', 'Rapi', 'Bhagmati'], correct: 0 },
+            { flag: '💧', question: 'Qual rio passa por Tibilíssi na Geórgia?', options: ['Mtkvari', 'Aragvi', 'Rion', 'Enguri'], correct: 0 },
+            { flag: '🌊', question: 'Qual é o rio mais longo de Portugal?', options: ['Douro', 'Tejo', 'Mondego', 'Lima'], correct: 1 },
+            { flag: '💧', question: 'Qual rio passa por Krakóvia na Polônia?', options: ['Vístula', 'Dunajec', 'Raba', 'Wisła'], correct: 0 },
+            { flag: '🌊', question: 'Qual é o rio mais longo da Escócia?', options: ['Spey', 'Tay', 'Tweed', 'Clyde'], correct: 1 },
+            { flag: '💧', question: 'Qual rio passa por Zurique na Suíça?', options: ['Reno', 'Linth', 'Sihl', 'Limmat'], correct: 3 },
+            { flag: '🌊', question: 'Qual é o rio mais longo da Holanda?', options: ['Reno', 'Meuse', 'Maas', 'Ems'], correct: 0 },
+            { flag: '💧', question: 'Qual rio passa por Milão na Itália?', options: ['Adige', 'Ticino', 'Pó', 'Lambro'], correct: 3 }
+        ]
     },
-    {
-        flag: '🇬🇧',
-        question: 'Qual país tem esta bandeira?',
-        options: ['Irlanda', 'Reino Unido', 'Escócia', 'País de Gales'],
-        correct: 1
-    },
-    {
-        flag: '🇩🇪',
-        question: 'Qual é este país europeu?',
-        options: ['Holanda', 'Polônia', 'Alemanha', 'Áustria'],
-        correct: 2
-    },
-    {
-        flag: '🇦🇺',
-        question: 'Qual país tem esta bandeira?',
-        options: ['Nova Zelândia', 'Austrália', 'Fiji', 'Samoa'],
-        correct: 1
-    },
-    {
-        flag: '🇮🇳',
-        question: 'Qual é este país?',
-        options: ['Paquistão', 'Bangladesh', 'Índia', 'Vietnã'],
-        correct: 2
-    },
-    {
-        flag: '🇿🇦',
-        question: 'Qual país tem esta bandeira?',
-        options: ['Moçambique', 'Zimbábue', 'Botswana', 'África do Sul'],
-        correct: 3
-    },
-    {
-        flag: '🇰🇷',
-        question: 'Qual é este país?',
-        options: ['Vietnã', 'Tailândia', 'Coreia do Sul', 'Camboja'],
-        correct: 2
+    montanhas: {
+        facil: [
+            { flag: '⛰️', question: 'Qual é a montanha mais alta do mundo?', options: ['Aconcágua', 'Kilimanjaro', 'Monte Everest', 'Elbrus'], correct: 2 },
+            { flag: '🏔️', question: 'Qual é a montanha mais alta da América do Sul?', options: ['Kilimanjaro', 'Aconcágua', 'Chimborazo', 'Cotopaxi'], correct: 1 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da América do Norte?', options: ['Pico', 'McKinley', 'Whitney', 'Rainier'], correct: 1 },
+            { flag: '🏔️', question: 'Qual é a montanha mais alta da Europa?', options: ['Elbrus', 'Mont Blanc', 'Breithorn', 'Gran Paradiso'], correct: 0 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Ásia?', options: ['K2', 'Kangchenjunga', 'Monte Everest', 'Lhotse'], correct: 2 },
+            { flag: '🏔️', question: 'Qual é a montanha mais alta da África?', options: ['Kenya', 'Speke', 'Stanley', 'Kilimanjaro'], correct: 3 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Austrália?', options: ['Bogong', 'Hotham', 'Kosciuszko', 'Townsend'], correct: 2 },
+            { flag: '🏔️', question: 'Em qual continente fica a Cordilheira dos Andes?', options: ['Ásia', 'América do Sul', 'América do Norte', 'Europa'], correct: 1 },
+            { flag: '⛰️', question: 'Em qual continente fica os Alpes?', options: ['Ásia', 'Europa', 'América', 'Oceania'], correct: 1 },
+            { flag: '🏔️', question: 'O Himalaia fica em qual continente?', options: ['América', 'Europa', 'Ásia', 'Oceania'], correct: 2 },
+            { flag: '⛰️', question: 'Em qual país fica o Kilimanjaro?', options: ['Quênia', 'Uganda', 'Tanzânia', 'Etiópia'], correct: 2 },
+            { flag: '🏔️', question: 'Em qual país fica o Denali?', options: ['Canadá', 'EUA', 'México', 'Groenlândia'], correct: 1 },
+            { flag: '⛰️', question: 'Em qual país fica o Aconcágua?', options: ['Chile', 'Bolívia', 'Argentina', 'Peru'], correct: 2 },
+            { flag: '🏔️', question: 'Em qual país fica o Mont Blanc?', options: ['Itália', 'Suíça', 'França', 'Todas acima'], correct: 3 },
+            { flag: '⛰️', question: 'A Cordilheira dos Andes é a maior do mundo?', options: ['Não', 'Sim', 'Talvez', 'Não existe'], correct: 1 }
+        ],
+        medio: [
+            { flag: '⛰️', question: 'Qual é o K2?', options: ['Primeira montanha do mundo', 'Segunda montanha mais alta', 'Terceira montanha mais alta', 'Quinta montanha mais alta'], correct: 1 },
+            { flag: '🏔️', question: 'Em qual país fica o K2?', options: ['Paquistão', 'Nepal', 'Índia', 'Butão'], correct: 0 },
+            { flag: '⛰️', question: 'Qual é a terceira montanha mais alta do mundo?', options: ['K2', 'Kangchenjunga', 'Lhotse', 'Makalu'], correct: 1 },
+            { flag: '🏔️', question: 'Em qual país fica a Cordilheira dos Andes?', options: ['Brasil', 'Colômbia', 'Peru', 'Todas acima'], correct: 3 },
+            { flag: '⛰️', question: 'Em qual país fica o Mont Elbrus?', options: ['Rússia', 'Geórgia', 'Turquia', 'Ambas'], correct: 0 },
+            { flag: '🏔️', question: 'Qual cadeia montanhosa passa por Suíça?', options: ['Alpes', 'Pireneus', 'Apeninos', 'Cárpatos'], correct: 0 },
+            { flag: '⛰️', question: 'Qual cadeia montanhosa passa por Portugal?', options: ['Alpes', 'Serras Ibéricas', 'Pireneus', 'Sistema Penico'], correct: 1 },
+            { flag: '🏔️', question: 'Em qual país fica o Pico Cristóbal Colón?', options: ['Colômbia', 'Equador', 'Peru', 'Panamá'], correct: 0 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta do Japão?', options: ['Kita', 'Ontake', 'Aso', 'Fuji'], correct: 3 },
+            { flag: '🏔️', question: 'Em qual país fica o Nanda Devi?', options: ['Nepal', 'Índia', 'Butão', 'Paquistão'], correct: 1 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da China?', options: ['Kangchenjunga', 'Mauna Kea', 'Maoershan', 'Kunlun'], correct: 3 },
+            { flag: '🏔️', question: 'Em qual país fica o Villarrica?', options: ['Argentina', 'Chile', 'Peru', 'Bolívia'], correct: 1 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta do Equador?', options: ['Cotopaxi', 'Antisana', 'Chimborazo', 'Pichincha'], correct: 2 },
+            { flag: '🏔️', question: 'Em qual país fica o Ben Nevis?', options: ['Irlanda', 'País de Gales', 'Escócia', 'Inglaterra'], correct: 2 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Grécia?', options: ['Olimpo', 'Parnasso', 'Pelion', 'Taigeto'], correct: 0 }
+        ],
+        dificil: [
+            { flag: '⛰️', question: 'Qual é a quarta montanha mais alta do mundo?', options: ['Kangchenjunga', 'Lhotse', 'Makalu', 'Cho Oyu'], correct: 0 },
+            { flag: '🏔️', question: 'Em qual país fica o Lhotse?', options: ['Paquistão', 'Nepal', 'Índia', 'Butão'], correct: 1 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Sibéria?', options: ['Bruz', 'Klyuchevskaya', 'Elbrus', 'Chegem'], correct: 1 },
+            { flag: '🏔️', question: 'Em qual país fica o Picos de Europa?', options: ['Portugal', 'Espanha', 'França', 'Andorra'], correct: 1 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Romênia?', options: ['Moldoveanu', 'Negru', 'Capra', 'Podragul'], correct: 0 },
+            { flag: '🏔️', question: 'Em qual país fica o Rysy?', options: ['Polônia', 'Eslováquia', 'Polônia e Eslováquia', 'Hungria'], correct: 2 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Sérvia?', options: ['Midzor', 'Kosmaj', 'Kopaonik', 'Sutjeska'], correct: 0 },
+            { flag: '🏔️', question: 'Em qual país fica o Vihren?', options: ['Albânia', 'Macedônia', 'Bulgária', 'Grécia'], correct: 2 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Estônia?', options: ['Emumägi', 'Suur Munamägi', 'Tudulinna', 'Harjumägi'], correct: 1 },
+            { flag: '🏔️', question: 'Em qual país fica o Gerlachov?', options: ['Eslováquia', 'Polônia', 'República Tcheca', 'Hungria'], correct: 0 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Lituânia?', options: ['Aukštasis Kalnas', 'Medvėgalis', 'Smiltynė', 'Kalvų kalnas'], correct: 0 },
+            { flag: '🏔️', question: 'Em qual país fica o Dachstein?', options: ['Áustria', 'Alemanha', 'Suíça', 'Itália'], correct: 0 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Irlanda?', options: ['Carrauntoohil', 'Macgillycuddy', 'Brandon', 'Beanna'], correct: 0 },
+            { flag: '🏔️', question: 'Em qual país fica o Snowdon?', options: ['Irlanda', 'País de Gales', 'Escócia', 'Inglaterra'], correct: 1 },
+            { flag: '⛰️', question: 'Qual é a montanha mais alta da Ucrânia?', options: ['Pip Ivan', 'Petros', 'Hoverla', 'Brebeneskul'], correct: 2 }
+        ]
     }
-];
+};
 
+// Variáveis globais
 let currentQuestion = 0;
 let score = 0;
 let answered = false;
+let selectedMode = '';
+let selectedDifficulty = 'facil';
+let currentQuiz = [];
+let gamesPlayed = 0;
+let bestScore = 0;
+let totalScores = [];
+
+// Carregar dados do localStorage
+function carregarDados() {
+    const dados = localStorage.getItem('geoquizStats');
+    if (dados) {
+        const stats = JSON.parse(dados);
+        gamesPlayed = stats.gamesPlayed || 0;
+        bestScore = stats.bestScore || 0;
+        totalScores = stats.totalScores || [];
+        atualizarStats();
+    }
+}
+
+// Salvar dados no localStorage
+function salvarDados() {
+    const stats = {
+        gamesPlayed,
+        bestScore,
+        totalScores
+    };
+    localStorage.setItem('geoquizStats', JSON.stringify(stats));
+}
+
+function atualizarStats() {
+    document.getElementById('gamesPlayed').textContent = gamesPlayed;
+    document.getElementById('bestScore').textContent = bestScore + '%';
+    
+    if (totalScores.length > 0) {
+        const mediaScores = Math.round(totalScores.reduce((a, b) => a + b, 0) / totalScores.length);
+        document.getElementById('avgScore').textContent = mediaScores + '%';
+    }
+}
+
+function iniciarModo(modo) {
+    selectedMode = modo;
+    document.getElementById('modeSelector').classList.remove('show');
+    document.getElementById('difficultySelector').classList.add('show');
+}
+
+function selecionarDificuldade(dificuldade) {
+    selectedDifficulty = dificuldade;
+    document.getElementById('difficultySelector').classList.remove('show');
+    
+    currentQuiz = [...quizzesData[selectedMode][dificuldade]].sort(() => Math.random() - 0.5);
+    
+    currentQuestion = 0;
+    score = 0;
+    answered = false;
+    
+    document.getElementById('quizContent').classList.add('show');
+    document.getElementById('progressContainer').style.display = 'block';
+    
+    const dificuldadeTexto = dificuldade === 'facil' ? 'Fácil' : dificuldade === 'medio' ? 'Médio' : 'Difícil';
+    document.getElementById('difficultyBadge').textContent = dificuldadeTexto;
+    document.getElementById('totalQuestions').textContent = currentQuiz.length;
+    
+    carregarPergunta();
+}
 
 function carregarPergunta() {
-    const quiz = quizzes[currentQuestion];
+    const quiz = currentQuiz[currentQuestion];
     
     document.getElementById('flag').textContent = quiz.flag;
     document.getElementById('question').textContent = quiz.question;
+    document.getElementById('currentQuestion').textContent = currentQuestion + 1;
     
     const buttons = document.querySelectorAll('.option-btn');
     buttons.forEach((btn, index) => {
@@ -336,12 +972,12 @@ function carregarPergunta() {
     });
     
     document.getElementById('resultado').textContent = '';
+    document.getElementById('resultado').className = '';
     document.getElementById('nextBtn').classList.remove('show');
     
-    const progressPercentage = ((currentQuestion) / quizzes.length) * 100;
+    const progressPercentage = ((currentQuestion) / currentQuiz.length) * 100;
     document.getElementById('progressBar').style.width = progressPercentage + '%';
     
-    document.getElementById('total').textContent = quizzes.length;
     answered = false;
 }
 
@@ -349,7 +985,7 @@ function verificar(resposta) {
     if (answered) return;
     
     answered = true;
-    const quiz = quizzes[currentQuestion];
+    const quiz = currentQuiz[currentQuestion];
     const respostaIndex = resposta.charCodeAt(0) - 65;
     const buttons = document.querySelectorAll('.option-btn');
     
@@ -363,7 +999,7 @@ function verificar(resposta) {
         buttons[respostaIndex].style.color = 'white';
         buttons[respostaIndex].style.borderColor = '#27ae60';
     } else {
-        document.getElementById('resultado').innerHTML = '❌ Incorreto! A resposta correta era: ' + quiz.options[quiz.correct];
+        document.getElementById('resultado').innerHTML = '❌ Incorreto! A resposta correta era: <strong>' + quiz.options[quiz.correct] + '</strong>';
         document.getElementById('resultado').className = 'incorreto';
         buttons[respostaIndex].style.background = '#e74c3c';
         buttons[respostaIndex].style.color = 'white';
@@ -373,14 +1009,13 @@ function verificar(resposta) {
         buttons[quiz.correct].style.borderColor = '#27ae60';
     }
     
-    document.getElementById('score').textContent = score;
     document.getElementById('nextBtn').classList.add('show');
 }
 
 function proximaPergunta() {
     currentQuestion++;
     
-    if (currentQuestion < quizzes.length) {
+    if (currentQuestion < currentQuiz.length) {
         carregarPergunta();
     } else {
         finalizarQuiz();
@@ -388,9 +1023,62 @@ function proximaPergunta() {
 }
 
 function finalizarQuiz() {
-    document.getElementById('quizContent').style.display = 'none';
+    const percentual = Math.round((score / currentQuiz.length) * 100);
+    
+    gamesPlayed++;
+    totalScores.push(percentual);
+    if (percentual > bestScore) {
+        bestScore = percentual;
+    }
+    salvarDados();
+    atualizarStats();
+    
+    document.getElementById('quizContent').classList.remove('show');
+    document.getElementById('progressContainer').style.display = 'none';
     document.getElementById('finalScreen').classList.add('show');
-    document.getElementById('finalScore').textContent = score + '/' + quizzes.length;
+    
+    document.getElementById('finalScore').textContent = score + '/' + currentQuiz.length;
+    document.getElementById('finalPercentage').textContent = percentual + '%';
+    
+    let emoji = '😢';
+    let mensagem = 'Que pena!';
+    
+    if (percentual >= 90) {
+        emoji = '🏆';
+        mensagem = 'Excelente! Você é um especialista em Geografia!';
+    } else if (percentual >= 75) {
+        emoji = '🎉';
+        mensagem = 'Muito bom! Você tem ótimo conhecimento geográfico!';
+    } else if (percentual >= 50) {
+        emoji = '👍';
+        mensagem = 'Bom trabalho! Continue estudando Geografia!';
+    } else if (percentual >= 25) {
+        emoji = '🤔';
+        mensagem = 'Não foi desta vez, tente novamente!';
+    }
+    
+    document.getElementById('finalEmoji').textContent = emoji;
+    document.getElementById('finalMessage').textContent = mensagem;
+    document.getElementById('acertos').textContent = score;
+    document.getElementById('erros').textContent = currentQuiz.length - score;
+    document.getElementById('taxaAcerto').textContent = percentual + '%';
+    
+    const modoTexto = {
+        bandeiras: 'Bandeiras',
+        capitais: 'Capitais',
+        continentes: 'Continentes',
+        rios: 'Rios',
+        montanhas: 'Montanhas'
+    };
+    
+    const dificuldadeTexto = {
+        facil: 'Fácil',
+        medio: 'Médio',
+        dificil: 'Difícil'
+    };
+    
+    document.getElementById('modoFinal').textContent = modoTexto[selectedMode] || '-';
+    document.getElementById('dificuldadeFinal').textContent = dificuldadeTexto[selectedDifficulty] || '-';
 }
 
 function reiniciar() {
@@ -398,15 +1086,29 @@ function reiniciar() {
     score = 0;
     answered = false;
     
-    document.getElementById('quizContent').style.display = 'block';
     document.getElementById('finalScreen').classList.remove('show');
-    document.getElementById('score').textContent = '0';
+    document.getElementById('quizContent').classList.add('show');
+    document.getElementById('progressContainer').style.display = 'block';
     
+    currentQuiz = [...quizzesData[selectedMode][selectedDifficulty]].sort(() => Math.random() - 0.5);
     carregarPergunta();
 }
 
-// Inicializar o quiz
-carregarPergunta();
+function irParaMenu() {
+    document.getElementById('finalScreen').classList.remove('show');
+    document.getElementById('quizContent').classList.remove('show');
+    document.getElementById('progressContainer').style.display = 'none';
+    document.getElementById('difficultySelector').classList.remove('show');
+    document.getElementById('modeSelector').classList.add('show');
+    
+    currentQuestion = 0;
+    score = 0;
+    answered = false;
+}
+
+// Inicializar
+carregarDados();
+document.getElementById('modeSelector').classList.add('show');
 </script>
 
 </body>

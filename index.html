@@ -6,61 +6,407 @@
 <title>GeoQuiz Bandeiras</title>
 
 <style>
-body{
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background: #f0f8ff;
-    margin: 20px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-h1{
-    color: #0066cc;
-}
-
-.quiz{
-    background: white;
-    max-width: 600px;
-    margin: auto;
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
-    border-radius: 10px;
 }
 
-button{
-    display: block;
+.container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    max-width: 700px;
     width: 100%;
-    margin: 8px 0;
-    padding: 10px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: #667eea;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.score {
+    font-size: 1.2em;
+    color: #666;
+    margin-top: 10px;
+}
+
+.quiz-content {
+    text-align: center;
+}
+
+.flag {
+    font-size: 8em;
+    margin: 30px 0;
+    animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.question {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.option-btn {
+    padding: 15px 20px;
+    font-size: 1em;
+    background: #f0f0f0;
+    border: 2px solid #ddd;
+    border-radius: 10px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    color: #333;
+}
+
+.option-btn:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.option-btn:active {
+    transform: translateY(0);
+}
+
+#resultado {
+    font-size: 1.3em;
+    margin-top: 20px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.correto {
+    color: #27ae60;
+}
+
+.incorreto {
+    color: #e74c3c;
+}
+
+.next-btn {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+}
+
+.next-btn.show {
+    display: block;
+}
+
+.next-btn:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
+}
+
+.progress {
+    width: 100%;
+    height: 8px;
+    background: #eee;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s ease;
+}
+
+.final-screen {
+    display: none;
+    text-align: center;
+}
+
+.final-screen.show {
+    display: block;
+}
+
+.final-score {
+    font-size: 3em;
+    color: #667eea;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.restart-btn {
+    width: 100%;
+    padding: 15px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+    background: #229954;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 25px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .flag {
+        font-size: 5em;
+    }
+
+    .options {
+        grid-template-columns: 1fr;
+    }
+
+    .question {
+        font-size: 1.2em;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<h1>🌎 GeoQuiz - Bandeiras</h1>
+<div class="container">
+    <div class="header">
+        <h1>🌎 GeoQuiz - Bandeiras 🏳️</h1>
+        <div class="score">
+            Pontuação: <span id="score">0</span>/<span id="total">10</span>
+        </div>
+    </div>
 
-<div class="quiz">
-    <h2>🇧🇷</h2>
-    <p>Qual é este país?</p>
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
 
-    <button onclick="verificar('A')">Argentina</button>
-    <button onclick="verificar('B')">Portugal</button>
-    <button onclick="verificar('C')">Brasil</button>
-    <button onclick="verificar('D')">México</button>
+    <div class="quiz-content" id="quizContent">
+        <div class="flag" id="flag">🇧🇷</div>
+        <div class="question" id="question">Qual é este país?</div>
+        
+        <div class="options">
+            <button class="option-btn" onclick="verificar('A')">Opção A</button>
+            <button class="option-btn" onclick="verificar('B')">Opção B</button>
+            <button class="option-btn" onclick="verificar('C')">Opção C</button>
+            <button class="option-btn" onclick="verificar('D')">Opção D</button>
+        </div>
 
-    <p id="resultado"></p>
+        <div id="resultado"></div>
+        <button class="next-btn" id="nextBtn" onclick="proximaPergunta()">Próxima Pergunta →</button>
+    </div>
+
+    <div class="final-screen" id="finalScreen">
+        <h2>🎉 Quiz Finalizado! 🎉</h2>
+        <div class="final-score" id="finalScore">0/10</div>
+        <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">Parabéns por participar!</p>
+        <button class="restart-btn" onclick="reiniciar()">Começar Novamente 🔄</button>
+    </div>
 </div>
 
 <script>
-function verificar(resposta){
-    if(resposta === 'C'){
-        document.getElementById("resultado").innerHTML =
-        "✅ Correto! É o Brasil.";
-    }else{
-        document.getElementById("resultado").innerHTML =
-        "❌ Resposta incorreta.";
+const quizzes = [
+    {
+        flag: '🇧🇷',
+        question: 'Qual é este país?',
+        options: ['Argentina', 'Portugal', 'Brasil', 'México'],
+        correct: 2
+    },
+    {
+        flag: '🇫🇷',
+        question: 'Qual país tem esta bandeira?',
+        options: ['Itália', 'França', 'Espanha', 'Alemanha'],
+        correct: 1
+    },
+    {
+        flag: '🇯🇵',
+        question: 'Qual é este país asiático?',
+        options: ['China', 'Coreia do Sul', 'Japão', 'Vietnã'],
+        correct: 2
+    },
+    {
+        flag: '🇺🇸',
+        question: 'Qual é este país?',
+        options: ['Canadá', 'México', 'Estados Unidos', 'Cuba'],
+        correct: 2
+    },
+    {
+        flag: '🇬🇧',
+        question: 'Qual país tem esta bandeira?',
+        options: ['Irlanda', 'Reino Unido', 'Escócia', 'País de Gales'],
+        correct: 1
+    },
+    {
+        flag: '🇩🇪',
+        question: 'Qual é este país europeu?',
+        options: ['Holanda', 'Polônia', 'Alemanha', 'Áustria'],
+        correct: 2
+    },
+    {
+        flag: '🇦🇺',
+        question: 'Qual país tem esta bandeira?',
+        options: ['Nova Zelândia', 'Austrália', 'Fiji', 'Samoa'],
+        correct: 1
+    },
+    {
+        flag: '🇮🇳',
+        question: 'Qual é este país?',
+        options: ['Paquistão', 'Bangladesh', 'Índia', 'Vietnã'],
+        correct: 2
+    },
+    {
+        flag: '🇿🇦',
+        question: 'Qual país tem esta bandeira?',
+        options: ['Moçambique', 'Zimbábue', 'Botswana', 'África do Sul'],
+        correct: 3
+    },
+    {
+        flag: '🇰🇷',
+        question: 'Qual é este país?',
+        options: ['Vietnã', 'Tailândia', 'Coreia do Sul', 'Camboja'],
+        correct: 2
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function carregarPergunta() {
+    const quiz = quizzes[currentQuestion];
+    
+    document.getElementById('flag').textContent = quiz.flag;
+    document.getElementById('question').textContent = quiz.question;
+    
+    const buttons = document.querySelectorAll('.option-btn');
+    buttons.forEach((btn, index) => {
+        btn.textContent = quiz.options[index];
+        btn.style.background = '#f0f0f0';
+        btn.style.color = '#333';
+        btn.style.borderColor = '#ddd';
+        btn.disabled = false;
+    });
+    
+    document.getElementById('resultado').textContent = '';
+    document.getElementById('nextBtn').classList.remove('show');
+    
+    const progressPercentage = ((currentQuestion) / quizzes.length) * 100;
+    document.getElementById('progressBar').style.width = progressPercentage + '%';
+    
+    document.getElementById('total').textContent = quizzes.length;
+    answered = false;
+}
+
+function verificar(resposta) {
+    if (answered) return;
+    
+    answered = true;
+    const quiz = quizzes[currentQuestion];
+    const respostaIndex = resposta.charCodeAt(0) - 65;
+    const buttons = document.querySelectorAll('.option-btn');
+    
+    buttons.forEach(btn => btn.disabled = true);
+    
+    if (respostaIndex === quiz.correct) {
+        score++;
+        document.getElementById('resultado').innerHTML = '✅ Correto!';
+        document.getElementById('resultado').className = 'correto';
+        buttons[respostaIndex].style.background = '#27ae60';
+        buttons[respostaIndex].style.color = 'white';
+        buttons[respostaIndex].style.borderColor = '#27ae60';
+    } else {
+        document.getElementById('resultado').innerHTML = '❌ Incorreto! A resposta correta era: ' + quiz.options[quiz.correct];
+        document.getElementById('resultado').className = 'incorreto';
+        buttons[respostaIndex].style.background = '#e74c3c';
+        buttons[respostaIndex].style.color = 'white';
+        buttons[respostaIndex].style.borderColor = '#e74c3c';
+        buttons[quiz.correct].style.background = '#27ae60';
+        buttons[quiz.correct].style.color = 'white';
+        buttons[quiz.correct].style.borderColor = '#27ae60';
+    }
+    
+    document.getElementById('score').textContent = score;
+    document.getElementById('nextBtn').classList.add('show');
+}
+
+function proximaPergunta() {
+    currentQuestion++;
+    
+    if (currentQuestion < quizzes.length) {
+        carregarPergunta();
+    } else {
+        finalizarQuiz();
     }
 }
+
+function finalizarQuiz() {
+    document.getElementById('quizContent').style.display = 'none';
+    document.getElementById('finalScreen').classList.add('show');
+    document.getElementById('finalScore').textContent = score + '/' + quizzes.length;
+}
+
+function reiniciar() {
+    currentQuestion = 0;
+    score = 0;
+    answered = false;
+    
+    document.getElementById('quizContent').style.display = 'block';
+    document.getElementById('finalScreen').classList.remove('show');
+    document.getElementById('score').textContent = '0';
+    
+    carregarPergunta();
+}
+
+// Inicializar o quiz
+carregarPergunta();
 </script>
 
 </body>
